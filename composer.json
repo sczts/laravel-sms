@@ -1,0 +1,24 @@
+{
+  "name": "sczts/sms",
+  "authors": [
+    {
+      "name": "eiixy",
+      "email": "990656271@qq.com"
+    }
+  ],
+  "require": {
+    "predis/predis": "^1.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Sczts\\Sms\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Sczts\\Sms\\SmsServiceProvider"
+      ]
+    }
+  }
+}
