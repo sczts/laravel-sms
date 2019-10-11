@@ -16,6 +16,8 @@ class LaravelServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->alias('sczts.sms', SmsService::class);
+        $this->app->singleton('sczts.sms', function () {
+            return new SmsService();
+        });
     }
 }
