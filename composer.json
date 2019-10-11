@@ -19,7 +19,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Sczts\\Sms\\SmsServiceProvider"
+        "Sczts\\Sms\\Providers\\LaravelServiceProvider"
       ]
     }
   }
