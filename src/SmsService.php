@@ -3,7 +3,7 @@
 
 namespace Sczts\Sms;
 
-use App\Services\Sms\SmsException;
+use Sczts\Sms\SmsException;
 use Illuminate\Support\Facades\Redis;
 
 class SmsService
