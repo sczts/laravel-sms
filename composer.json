@@ -1,5 +1,7 @@
 {
   "name": "sczts/sms",
+  "type": "library",
+  "license": "MIT",
   "authors": [
     {
       "name": "eiixy",
