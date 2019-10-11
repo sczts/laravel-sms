@@ -1,6 +1,6 @@
 <?php
 
-namespace Sczts\Sms;
+namespace Sczts\Sms\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
