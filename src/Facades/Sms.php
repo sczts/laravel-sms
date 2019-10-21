@@ -7,11 +7,11 @@ use Illuminate\Support\Facades\Facade;
 /**
  * Class Sms
  * @package Sczts\Sms
- * @see Sczts\Sms\SmsService
- * @method bool send($phone,$content);
- * @method bool sendTemplate($phone,$type,$data = []);
- * @method bool checkCaptcha($phone,$code,$type);
- * @method string setCaptcha($phone,$type,$length = 6);
+ * @see \Sczts\Sms\SmsService::class
+ * @method static bool send($phone,$content);
+ * @method static bool sendTemplate($phone,$type,$data = []);
+ * @method static bool checkCaptcha($phone,$code,$type);
+ * @method static string setCaptcha($phone,$type,$length = 6);
  */
 class Sms extends Facade
 {

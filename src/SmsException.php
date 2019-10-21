@@ -10,9 +10,4 @@ class SmsException extends \Exception
         $this->message = $message;
         $this->code = $code;
     }
-
-    public function render()
-    {
-        return $this->message;
-    }
 }
