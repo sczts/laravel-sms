@@ -7,9 +7,10 @@ return [
             'id' => env('SMS_LINKAI_ID',''),   // 账号
             'pwd' => env('SMS_LINKAI_PWD',''),      // 密码
             'host' => env('SMS_LINKAI_HOST','http://sdk2.028lk.com/sdk2/BatchSend2.aspx'), // 短信请求地址
+            'suffix' => env('SMS_LINKAI_SUFFIX','')
         ],
         'ali' => [
-
+            // todo 新增阿里大鱼相关配置
         ]
     ],
     "templates" => [
