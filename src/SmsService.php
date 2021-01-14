@@ -3,17 +3,19 @@
 
 namespace Sczts\Sms;
 
-use Sczts\Sms\SmsException;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Cache;
+use Sczts\Sms\Exceptions\SmsException;
 
 class SmsService
 {
     private $handler;
     private $config;
+    private $suffix;
 
     public function __construct()
     {
         $default = config('sms.default');
+        $this->suffix = config('sms.suffix');
         $this->config = config('sms.captcha');
         $this->handler = static::getHandle($default);
     }
@@ -25,28 +27,29 @@ class SmsService
      * @param $content
      * @return bool
      */
-    public function send($phone,$content)
+    public function send($phone, $content)
     {
-        return $this->handler->send($phone,$content);
+        return $this->handler->send($phone, $content . $this->suffix);
     }
 
     /**
      * 发送模板内容
      * @param $phone
      * @param $type
-     * @param $data
+     * @param array $data
      * @return bool
+     * @throws SmsException
      */
-    public function sendTemplate($phone,$type,$data = [])
+    public function sendTemplate($phone, $type, $data = [])
     {
-        if (!in_array('captcha',$data)){
-            $data['captcha'] = $this->setCaptcha($phone,$type);
+        if (!in_array('captcha', $data)) {
+            $data['captcha'] = $this->setCaptcha($phone, $type);
         }
-        if (!in_array('expire',$data)){
+        if (!in_array('expire', $data)) {
             $data['expire'] = $this->config['expire'];
         }
-        $content = $this->template($type,$data);
-        return $this->send($phone,$content);
+        $content = $this->template($type, $data);
+        return $this->send($phone, $content);
     }
 
 
@@ -57,12 +60,12 @@ class SmsService
      * @param $type
      * @return bool
      */
-    public function checkCaptcha($phone,$code,$type)
+    public function checkCaptcha($phone, $code, $type)
     {
-        $key = $this->config['prefix'].':'.$phone.':'.$type;
-        $result = Redis::get($key) == $code;
-        if ($result){
-            Redis::del($key);
+        $key = $this->config['prefix'] . ':' . $phone . ':' . $type;
+        $result = Cache::get($key);
+        if ($result == $code) {
+            Cache::forget($key);
             return true;
         }
         return false;
@@ -75,13 +78,12 @@ class SmsService
      * @param $length
      * @return string
      */
-    public function setCaptcha($phone,$type,$length = 6)
+    public function setCaptcha($phone, $type, $length = 6)
     {
         $code = $this->random($length);
-        $key = $this->config['prefix'].':'.$phone.':'.$type;
+        $key = $this->config['prefix'] . ':' . $phone . ':' . $type;
         $expire = $this->config['expire'] * 60;
-        Redis::set($key,$code);
-        Redis::expire($key,$expire);
+        Cache::put($key, $code, $expire);
         return $code;
     }
 
@@ -108,19 +110,20 @@ class SmsService
      * @return mixed
      * @throws SmsException
      */
-    private function template($type,$data){
+    private function template($type, $data)
+    {
         $templates = config('sms.templates');
-        if (!key_exists($type,$templates)){
-            throw new SmsException('模板 '.$type.' 未定义');
+        if (!key_exists($type, $templates)) {
+            throw new SmsException('模板 ' . $type . ' 未定义');
         }
         $content = $templates[$type];
-        preg_match_all('/{(\w.*?)}/',$content,$match);
+        preg_match_all('/{(\w.*?)}/', $content, $match);
         $keys = $match[1];
-        foreach ($keys as $key){
-            if (!key_exists($key,$data)){
-                throw new SmsException('验证码模板参数 '.$key.' 未定义');
+        foreach ($keys as $key) {
+            if (!key_exists($key, $data)) {
+                throw new SmsException('验证码模板参数 ' . $key . ' 未定义');
             }
-            $content = str_replace('{'.$key.'}',$data[$key],$content);
+            $content = str_replace('{' . $key . '}', $data[$key], $content);
         }
         return $content;
     }
@@ -132,12 +135,13 @@ class SmsService
      * @return mixed
      * @throws SmsException
      */
-    private static function getHandle($type):Sms{
+    private static function getHandle($type): Sms
+    {
         $class_name = __NAMESPACE__ . '\\Handles\\' . str_replace(' ', '', ucwords(str_replace('_', ' ', $type)));
         if (class_exists($class_name)) {
             return new $class_name();
-        }else{
-            throw new SmsException($class_name. ' not exist');
+        } else {
+            throw new SmsException($class_name . ' not exist');
         }
     }
 

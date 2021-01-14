@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Sczts\Sms;
+namespace Sczts\Sms\Exceptions;
 
 
 class SmsException extends \Exception

@@ -1,5 +1,5 @@
 {
-  "name": "sczts/sms",
+  "name": "sczts/laravel-sms",
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -9,7 +9,7 @@
     }
   ],
   "require": {
-    "predis/predis": "^1.1"
+    "laravel/framework": "^5.5|^6|^7|^8"
   },
   "autoload": {
     "psr-4": {

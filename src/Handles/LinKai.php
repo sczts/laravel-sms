@@ -3,7 +3,7 @@
 namespace Sczts\Sms\Handles;
 
 use Sczts\Sms\Sms;
-use Sczts\Sms\SmsException;
+use Sczts\Sms\Exceptions\SmsException;
 
 class LinKai implements Sms
 {
@@ -15,16 +15,14 @@ class LinKai implements Sms
     public function __construct()
     {
         $config = config('sms.handles.lin_kai');
-
         $this->id = $config['id'];
         $this->pwd = $config['pwd'];
         $this->host = $config['host'];
-        $this->suffix = $config['suffix'];
     }
 
     public function send($phone, $content)
     {
-        $content = rawurlencode(mb_convert_encoding($content.$this->suffix, "gb2312", "utf-8"));
+        $content = rawurlencode(mb_convert_encoding($content, "gb2312", "utf-8"));
         $uri = "{$this->host}?CorpID={$this->id}&Pwd={$this->pwd}&Mobile={$phone}&Content={$content}&Cell=&SendTime=";
         $result = $this->curl($uri);
         return $this->checkResult($result);
