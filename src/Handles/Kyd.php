@@ -27,9 +27,10 @@ class Kyd implements Sms
         $params = [
             'Account' => $this->account,
             'Password' => $this->password,
+            'Mobile' => $phone,
             'Content' => $content,
-            'Extnum' => null,
-            'Time' => null
+            'Extnum' => '',
+            'Time' => ''
         ];
         $url = Str::finish($this->host, '?') . http_build_query($params);
         $result = file_get_contents($url);

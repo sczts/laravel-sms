@@ -1,7 +1,7 @@
 <?php
 return [
     'default' => env('SMS_DEFAULT','lin_kai'),
-    'prefix' => env('SMS_SUFFIX',''),     // 短信统一后缀
+    'suffix' => env('SMS_SUFFIX',''),     // 短信统一后缀
     'handles' => [
         'lin_kai' => [  // 临凯短信
             'id' => env('SMS_LINKAI_ID',''),   // 账号
