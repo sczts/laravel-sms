@@ -2,7 +2,7 @@
 
 1. 使用 composer 安装
     ```
-    composer require sczts/sms
+    composer require sczts/laravel-sms
     ```
 
 2. 发布配置文件
@@ -14,9 +14,9 @@
     ```bash
     # 短信配置
     SMS_DEFAULT=lin_kai
+    SMS_SUFFIX="【XXXXXX】"
     # 凌凯短信配置
     SMS_LINKAI_ID=XXXXXXX
-    SMS_LINKAI_PWD=123456
+    SMS_LINKAI_PWD=XXXXXXX
     SMS_LINKAI_HOST=http://sdk2.028lk.com/sdk2/BatchSend2.aspx
-    SMS_LINKAI_SUFFIX="【XXXXXX】"
     ```
